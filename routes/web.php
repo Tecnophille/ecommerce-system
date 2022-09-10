@@ -20,6 +20,7 @@ use App\Http\Controllers\Frontend\ServiceCustomerController;
 use App\Http\Controllers\Frontend\SubscribeSessionController;
 use App\Http\Controllers\Frontend\PaymentController;
 use App\Http\Controllers\Frontend\PageController;
+// use App\Http\Controllers\Frontend\productsController;
 
 //Route::redirect('/', '');
 Route::post('currency-price', [CartController::class, 'currencyPrice'])->name('currency_price');
@@ -39,12 +40,32 @@ Route::group(['middleware' => ['is_user']],function() {
         Route::get('/', [ContactUsController::class, 'contactUs'])->name('contact.us');
         Route::post('store', [ContactUsController::class, 'contactUsStore'])->name('contact.us.store');
     });
-    Route::group(['prefix' => 'blog'], function () {
-        Route::get('/', [BlogController::class, 'index'])->name('blog');
-        Route::get('/blog-details/{id}', [BlogController::class, 'blogDetails'])->name('blog.details');
-        Route::post('/blog-comment', [BlogCommentController::class, 'blogComment'])->name('user.blog.comment');
+    // Route::group(['prefix' => 'blog'], function () {
+    //     Route::get('/', [BlogController::class, 'index'])->name('blog');
+    //     Route::get('/blog-details/{id}', [BlogController::class, 'blogDetails'])->name('blog.details');
+    //     Route::post('/blog-comment', [BlogCommentController::class, 'blogComment'])->name('user.blog.comment');
 
-    });
+    // });
+    Route::get('/packages/swift', 'App\Http\Controllers\PackagesController@swift');
+Route::get('/packages/evaluation', 'App\Http\Controllers\PackagesController@evaluation');
+Route::get('/packages/free', 'App\Http\Controllers\PackagesController@free');
+    
+//     Route::get('/faq', 'App\Http\Controllers\pagesController@faq');
+// Route::get('/rules', 'App\Http\Controllers\pagesController@rules');
+// Route::get('/login', 'App\Http\Controllers\pagesController@login');
+// Route::get('/signup', 'App\Http\Controllers\pagesController@signup');
+// Route::get('/about', 'App\Http\Controllers\pagesController@about');
+
+
+// // Route for packages files
+Route::get('/packages/swift', 'App\Http\Controllers\PackagesController@swift');
+Route::get('/packages/evaluation', 'App\Http\Controllers\PackagesController@evaluation');
+Route::get('/packages/free', 'App\Http\Controllers\PackagesController@free');
+
+// //route for products 
+Route::resource('products', 'App\Http\Controllers\productsController');
+
+
 
     Route::get('/payments/approval', [CheckoutController::class, 'approval'])->name('approval');
     Route::get('/payments/cancelled', [CheckoutController::class, 'cancelled'])->name('cancelled');
