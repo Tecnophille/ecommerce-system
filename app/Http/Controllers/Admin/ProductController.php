@@ -132,48 +132,17 @@ class ProductController extends Controller
 
     public function productStore(ProductRequest $request){
         $data = $request->except([
-            'primary_image',
-            'image_two',
-            'image_three',
-            'image_four',
-            'image_five',
+           
             'status',
-            'feature',
-            'best_sale',
-            'on_sale',
-            'on_arrival',
+           
             'digital_file',
             'digital_link',
             'license_name',
             'license_key',
             'affiliate_link',
         ]);
-        if (!empty($request->primary_image)) {
-            $data['primary_image'] = fileUpload($request['primary_image'], ProductImage());
-        } else {
-            return redirect()->back()->with('toast_error', __('Image is  required'));
-        }
-        if (!empty($request->image_two)) {
-            $data['img_two'] = fileUpload($request['image_two'], ProductImage());
-        } else {
-            return redirect()->back()->with('toast_error', __('Image is  required'));
-        }
-
-        if (!empty($request->image_three)) {
-            $data['img_three'] = fileUpload($request['image_three'], ProductImage());
-        } else {
-            return redirect()->back()->with('toast_error', __('Image is  required'));
-        }
-        if (!empty($request->image_four)) {
-            $data['img_four'] = fileUpload($request['image_four'], ProductImage());
-        } else {
-            return redirect()->back()->with('toast_error', __('Image is  required'));
-        }
-        if (!empty($request->image_five)) {
-            $data['img_five'] = fileUpload($request['image_five'], ProductImage());
-        } else {
-            return redirect()->back()->with('toast_error', __('Image is  required'));
-        }
+       
+        
 
         $data['status']=checkBoxValue($request->status);
         $data['feature']=checkBoxValue($request->feature);
@@ -216,7 +185,7 @@ class ProductController extends Controller
             $create_product = $this->affiliateProductAdd($data);
         }
 
-        if($create_product['success'] == true) {
+       if(isset($create_product["success"])){
             return redirect()->route('admin.product')->with('toast_success', __('Successfully Product Created!'));
         }
         return redirect()->route('admin.product')->with('toast_error', __('Something went wrong!'));
@@ -229,51 +198,33 @@ class ProductController extends Controller
         $product = Product::create([
             'en_Product_Name' => $data['en_product_name'],
             'en_Product_Slug' => $data['en_product_slug'],
-            'Brand_Id' => $data['en_brand_name'],
-            'Category_Id' => $data['en_category_name'],
+           
             'Price' => $data['price'],
             'Discount' => $data['discount'],
             'Discount_Price' => $data['discount_price'],
             'en_About' => $data['en_about'],
             'en_Description' => $data['en_description'],
-            'en_ShippingReturn' => $data['en_shippingreturn'],
-            'en_AdditionalInformation' => $data['en_additionalinformation'],
-            'fr_Product_Name' => $data['fr_product_name'],
-            'fr_Product_Slug' => $data['fr_product_slug'],
-            'fr_About' => $data['fr_about'],
-            'fr_Description' => $data['fr_description'],
-            'fr_ShippingReturn' => $data['fr_shippingreturn'],
-            'fr_AdditionalInformation' => $data['fr_additionalinformation'],
-            'Quantity' => $data['qty'],
-            'ItemTag' => $data['item_teg'],
-            'Primary_Image' => $data['primary_image'],
-            'Image2' => $data['img_two'],
-            'Image3' => $data['img_three'],
-            'Image4' => $data['img_four'],
-            'Image5' => $data['img_five'],
+            
 
             'Status' => $data['status'],
-            'Featured_Product' => $data['feature'],
-            'Best_Selling' => $data['best_sale'],
-            'On_Sale' => $data['on_sale'],
-            'New_Arrival' => $data['on_arrival'],
+            
             'Voucher' => $this->generateRandomString(6),
         ]);
-        if(!empty($product)){
-            foreach($data['product_tag'] as $rpt) {
-                ProductTag::create([
-                    'tag' => $rpt,
-                    'product_id' => $product->id,
-                ]);
-            }
-            $colorsid = $data['color'];
-            $sizeid = $data['size'];
-            $product->colors()->sync($colorsid);
-            $product->sizes()->sync($sizeid);
+        // if(!empty($product)){
+        //     foreach($data['product_tag'] as $rpt) {
+        //         ProductTag::create([
+        //             'tag' => $rpt,
+        //             'product_id' => $product->id,
+        //         ]);
+        //     }
+        //     $colorsid = $data['color'];
+        //     $sizeid = $data['size'];
+        //     $product->colors()->sync($colorsid);
+        //     $product->sizes()->sync($sizeid);
 
-            $result['success'] = true;
-        }
-        return $result;
+        //     $result['success'] = true;
+        // }
+        // return $result;
     }
 
     public function digitalProductAdd($data)
@@ -282,51 +233,24 @@ class ProductController extends Controller
         $product = Product::create([
             'en_Product_Name' => $data['en_product_name'],
             'en_Product_Slug' => $data['en_product_slug'],
-            'Brand_Id' => $data['en_brand_name'],
-            'Category_Id' => $data['en_category_name'],
+            
             'Price' => $data['price'],
             'Discount' => $data['discount'],
             'Discount_Price' => $data['discount_price'],
             'en_About' => $data['en_about'],
             'en_Description' => $data['en_description'],
-            'en_ShippingReturn' => $data['en_shippingreturn'],
-            'en_AdditionalInformation' => $data['en_additionalinformation'],
-            'fr_Product_Name' => $data['fr_product_name'],
-            'fr_Product_Slug' => $data['fr_product_slug'],
-            'fr_About' => $data['fr_about'],
-            'fr_Description' => $data['fr_description'],
-            'fr_ShippingReturn' => $data['fr_shippingreturn'],
-            'fr_AdditionalInformation' => $data['fr_additionalinformation'],
+            
             'Quantity' => $data['qty'],
-            'ItemTag' => $data['item_teg'],
-            'Primary_Image' => $data['primary_image'],
-            'Image2' => $data['img_two'],
-            'Image3' => $data['img_three'],
-            'Image4' => $data['img_four'],
-            'Image5' => $data['img_five'],
-
+           
             'Status' => $data['status'],
-            'Featured_Product' => $data['feature'],
-            'Best_Selling' => $data['best_sale'],
-            'On_Sale' => $data['on_sale'],
-            'New_Arrival' => $data['on_arrival'],
+          
             'Voucher' => $this->generateRandomString(6),
             'digital_type' => $data['digital_type'],
             'digital_file' => $data['digital_file'],
             'digital_link' => $data['digital_link'],
             'type' => PRODUCT_DIGITAL,
         ]);
-        if(!empty($product)){
-            foreach($data['product_tag'] as $rpt) {
-                ProductTag::create([
-                    'tag' => $rpt,
-                    'product_id' => $product->id,
-                ]);
-            }
-
-            $result['success'] = true;
-        }
-        return $result;
+       
     }
 
     public function licenseProductAdd($data)
